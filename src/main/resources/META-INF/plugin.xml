@@ -15,4 +15,14 @@
     <applicationListeners>
         <listener class="com.github.anorigami.template.listeners.MyApplicationActivationListener" topic="com.intellij.openapi.application.ApplicationActivationListener"/>
     </applicationListeners>
+    <actions>
+        <action id="test.editor.string" class="action.InsertEditor" text=":generatte"
+                description="insert sting to editor with no \ \t \n">
+            <add-to-group group-id="GenerateGroup" anchor="first"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt BACK_SLASH"/>
+        </action>
+        <action id="test.read.yml" class="action.InitYML" text="InitYML" description="auto read yml to a hashmap">
+            <add-to-group group-id="GenerateGroup" anchor="before" relative-to-action="DelegateMethods"/>
+        </action>
+    </actions>
 </idea-plugin>
