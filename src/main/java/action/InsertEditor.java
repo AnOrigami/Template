@@ -43,11 +43,11 @@ public class InsertEditor extends AnAction {
         Map<String, String> TextMap = null;
         String allText = elements.getString();
         TextMap = stringToMap(allText);
-        if (InitYML.dataMap.isEmpty()) {
+        if (InitYML.noteMap.isEmpty()||InitYML.dataMap.isEmpty()) {
             InitYML initYML = new InitYML();
             initYML.actionPerformed(event);
         }
-        if (allText != null && allText.contains(":generate")) {
+        if (allText != null && allText.contains("generate:")) {
 
 
             String printCode = formatPrintCode(InitYML.dataMap, TextMap);
@@ -56,12 +56,12 @@ public class InsertEditor extends AnAction {
             });
         } else {
             WriteCommandAction.runWriteCommandAction(project, () -> {
-                editor.getDocument().insertString(elements.getOffset(), "please sure you select code contains \":gererate\"");
+                editor.getDocument().insertString(elements.getOffset(), "please sure you select code contains \"gererate:\"");
             });
         }
     }
 
-    private StringAndOffset getAllElementAndOffset(PsiElement element) {
+    public static StringAndOffset getAllElementAndOffset(PsiElement element) {
         StringAndOffset elements = new StringAndOffset();
         elements.setString("");
         PsiElement e = element;
@@ -85,7 +85,7 @@ public class InsertEditor extends AnAction {
     }
 
 
-    private boolean _continue(String e) {
+    private static boolean _continue(String e) {
         int count = 0;
         int index = 0;
         while (index != -1) {
@@ -100,18 +100,18 @@ public class InsertEditor extends AnAction {
 
     }
 
-    public String formateString(String s) {
+    public static String formateString(String s) {
         String code = s.replaceAll("/{2,}", "/").replaceAll("[\n\r]", "").replaceAll("\\s+", "");
         return code;
     }
 
-    public String formatPrintCode(Map<String, String> ymlMap, Map<String, String> selectedMap) {
-        String printCode = ymlMap.get(selectedMap.get("type"));
+    public static String formatPrintCode(Map<String, String> ymlMap, Map<String, String> selectedMap) {
+        String printCode = ymlMap.get(selectedMap.get("generate"));
         String formateCode = "";
         for (Map.Entry<String, String> entry : selectedMap.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
-            if (!key.equals("author") && !key.equals("type")) {
+            if (!key.equals("generate") && !key.equals("n")) {
                 printCode = printCode.replaceAll(key, value);
             }
         }
@@ -119,7 +119,7 @@ public class InsertEditor extends AnAction {
         return formateCode;
     }
 
-    public Map<String, String> stringToMap(String s) {
+    public static Map<String, String> stringToMap(String s) {
         String key = "", value = "";
         Map<String, String> map = new HashMap<>();
         boolean b = true;
